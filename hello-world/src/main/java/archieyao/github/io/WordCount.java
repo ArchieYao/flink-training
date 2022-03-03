@@ -7,6 +7,8 @@ import org.apache.flink.api.java.operators.DataSource;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.util.Collector;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author ArchieYao
  * Created: 2022/2/22 5:19 PM
@@ -34,6 +36,7 @@ public class WordCount {
                 for (String s : split) {
                     if (s.length() > 0) {
                         collector.collect(new Tuple2<>(s, 1));
+                        TimeUnit.SECONDS.sleep(5);
                     }
                 }
             }
