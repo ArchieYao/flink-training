@@ -1,2 +1,2 @@
-# flink-learning
+# flink-training
 

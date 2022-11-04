@@ -1,6 +1,5 @@
 package archieyao.github.io.source;
 
-import com.sun.org.slf4j.internal.LoggerFactory;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.streaming.api.functions.source.SourceFunction;
 import org.slf4j.Logger;

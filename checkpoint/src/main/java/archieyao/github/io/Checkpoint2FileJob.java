@@ -39,8 +39,8 @@ public class Checkpoint2FileJob {
         // map operator
         SingleOutputStreamOperator<Tuple2<String, Integer>> operator = source.map(MapFunc.getMapFunc(logger));
         // sink
-        operator.keyBy(0).sum(1).print();
-
+        // operator.keyBy(0).sum(1).print();
+        operator.keyBy(v -> v.f0).sum(1).print();
         executionEnvironment.execute("not-restart");
     }
 }
