@@ -12,7 +12,7 @@ import org.slf4j.Logger;
  */
 public class MapFunc {
 
-    public static MapFunction<Tuple3<String, Integer, Long>, Tuple2<String, Integer>> getMapFunc(Logger logger) {
+    public static MapFunction<Tuple3<String, Integer, Long>, Tuple2<String, Integer>> getMapFuncWithExp(Logger logger) {
         return new MapFunction<Tuple3<String, Integer, Long>, Tuple2<String, Integer>>() {
             @Override
             public Tuple2<String, Integer> map(Tuple3<String, Integer, Long> event) throws Exception {
@@ -20,6 +20,15 @@ public class MapFunc {
                     logger.error("event.f1 more than 100. value : " + event.f1);
                     throw new RuntimeException("event.f1 more than 100.");
                 }
+                return new Tuple2<>(event.f0, event.f1);
+            }
+        };
+    }
+
+    public static MapFunction<Tuple3<String, Integer, Long>, Tuple2<String, Integer>> getMapFunc(Logger logger) {
+        return new MapFunction<Tuple3<String, Integer, Long>, Tuple2<String, Integer>>() {
+            @Override
+            public Tuple2<String, Integer> map(Tuple3<String, Integer, Long> event) throws Exception {
                 return new Tuple2<>(event.f0, event.f1);
             }
         };

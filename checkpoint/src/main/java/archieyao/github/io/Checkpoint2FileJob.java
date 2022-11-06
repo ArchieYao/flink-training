@@ -9,6 +9,7 @@ import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.runtime.state.hashmap.HashMapStateBackend;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
+import org.apache.flink.streaming.api.environment.CheckpointConfig;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +21,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Checkpoint2FileJob {
     public static void main(String[] args) throws Exception {
-        Logger logger = LoggerFactory.getLogger(CheckpointFixDelayRestartJob.class);
+        Logger logger = LoggerFactory.getLogger(Checkpoint2FileJob.class);
 
         StreamExecutionEnvironment executionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment();
         executionEnvironment.setParallelism(1);
@@ -30,17 +31,18 @@ public class Checkpoint2FileJob {
         executionEnvironment.enableCheckpointing(10);
 
         executionEnvironment.setStateBackend(new HashMapStateBackend());
-        executionEnvironment.getCheckpointConfig().setCheckpointStorage("file:///Users/archieyao/workProjects/learning/tmp");
+        executionEnvironment.getCheckpointConfig().setCheckpointStorage("file:///tmp/flink-training");
 
         // 保留Checkpoint
-        // executionEnvironment.getCheckpointConfig().setExternalizedCheckpointCleanup(CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);
+         executionEnvironment.getCheckpointConfig().setExternalizedCheckpointCleanup(
+                 CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);
         // source
         DataStreamSource<Tuple3<String, Integer, Long>> source = executionEnvironment.addSource(SourceFunc.getSourceFunc(logger));
         // map operator
-        SingleOutputStreamOperator<Tuple2<String, Integer>> operator = source.map(MapFunc.getMapFunc(logger));
+        SingleOutputStreamOperator<Tuple2<String, Integer>> operator = source.map(MapFunc.getMapFuncWithExp(logger));
         // sink
         // operator.keyBy(0).sum(1).print();
         operator.keyBy(v -> v.f0).sum(1).print();
-        executionEnvironment.execute("not-restart");
+        executionEnvironment.execute("Checkpoint2FileJob");
     }
 }

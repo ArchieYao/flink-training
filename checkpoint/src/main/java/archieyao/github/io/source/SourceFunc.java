@@ -20,15 +20,16 @@ public class SourceFunc {
                 int index = 1;
                 while (true) {
                     sourceContext.collect(new Tuple3<>("key", index++, System.currentTimeMillis()));
-                    TimeUnit.MILLISECONDS.sleep(100);
+                    TimeUnit.MILLISECONDS.sleep(1000);
                 }
             }
 
             @Override
             public void cancel() {
-                logger.warn("source func cancel.");
+//                logger.warn("source func cancel.");
             }
         };
 
     }
+
 }

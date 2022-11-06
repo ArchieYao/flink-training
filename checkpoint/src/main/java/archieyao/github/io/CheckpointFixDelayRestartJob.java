@@ -32,7 +32,7 @@ public class CheckpointFixDelayRestartJob {
         // source
         DataStreamSource<Tuple3<String, Integer, Long>> source = executionEnvironment.addSource(SourceFunc.getSourceFunc(logger));
         // map operator
-        SingleOutputStreamOperator<Tuple2<String, Integer>> operator = source.map(MapFunc.getMapFunc(logger));
+        SingleOutputStreamOperator<Tuple2<String, Integer>> operator = source.map(MapFunc.getMapFuncWithExp(logger));
         // sink
         operator.keyBy(0).sum(1).print();
 
