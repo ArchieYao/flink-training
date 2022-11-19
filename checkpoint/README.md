@@ -92,4 +92,4 @@ mvn clean package -Dmaven.test.skip=true
    ```shell
    ./bin/flink run -c archieyao.github.io.TopologyChange -s/tmp/flink-training/savepoint-3fb882-020b9cb0a8f8 --allowNonRestoredState /opt/flink-1.14.6/examples/custom/checkpoint-1.0-SNAPSHOT.jar
    ```
-   从结果中，version4 输出的count 是从之前version3版本中累加的结果，说明sum 算子加上uid之后，依然可以从快照中恢复。
+   从结果中，version4 输出的count 是从之前version3版本中累加的结果，并且时间是从state中获取的，说明 sum 算子加上uid之后，可以从快照中恢复。
