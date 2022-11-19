@@ -36,7 +36,7 @@ public class WordCount {
                 for (String s : split) {
                     if (s.length() > 0) {
                         collector.collect(new Tuple2<>(s, 1));
-                        TimeUnit.SECONDS.sleep(5);
+//                        TimeUnit.SECONDS.sleep(5);
                     }
                 }
             }

@@ -19,6 +19,8 @@
         <scala.version>2.11.12</scala.version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
+        <dependency-scope>provided</dependency-scope>
+<!--         <dependency-scope>compile</dependency-scope>-->
     </properties>
 
     <dependencies>
@@ -26,20 +28,20 @@
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-clients_2.11</artifactId>
             <version>${flink.version}</version>
-<!--                        <scope>provided</scope>-->
+            <scope>${dependency-scope}</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-core</artifactId>
             <version>${flink.version}</version>
-<!--                        <scope>provided</scope>-->
+            <scope>${dependency-scope}</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-scala_${scala.binary.version}</artifactId>
             <version>${flink.version}</version>
-<!--                        <scope>provided</scope>-->
+            <scope>${dependency-scope}</scope>
         </dependency>
 
         <!-- Apache Flink dependencies -->
@@ -48,14 +50,14 @@
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-streaming-scala_${scala.binary.version}</artifactId>
             <version>${flink.version}</version>
-<!--                        <scope>provided</scope>-->
+            <scope>${dependency-scope}</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-runtime_${scala.binary.version}</artifactId>
             <version>1.13.6</version>
-<!--            <scope>provided</scope>-->
+            <scope>${dependency-scope}</scope>
         </dependency>
 
         <!-- Add logging framework, to produce console output when running in the IDE. -->
@@ -64,13 +66,13 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
             <version>2.19.0</version>
-<!--            <scope>provided</scope>-->
+            <scope>${dependency-scope}</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>2.19.0</version>
-<!--            <scope>provided</scope>-->
+            <scope>${dependency-scope}</scope>
         </dependency>
     </dependencies>
 

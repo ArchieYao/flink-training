@@ -1,6 +1,7 @@
 ## RecoverFromCheckpoint
 
 需要先启动flink集群，本地模式：
+
 ```shell
 ./bin/start-cluster local
 ```
@@ -37,7 +38,7 @@ mvn clean package -Dmaven.test.skip=true
 ./bin/flink run -s /tmp/flink-training/3a16d77da5dbdc952541a7a89b60546d/chk-1799  -c archieyao.github.io.RecoverFromCheckpoint /home/archieao/workspace/flink-training/checkpoint/target/checkpoint-1.0-SNAPSHOT.jar
 ```
 
-## RecoverFromSavepoint 
+## RecoverFromSavepoint
 
 编译方式同上，由于去除了作业中的 `exception` ，作业会一直运行，在作业运行中，进行一次 `savepoint`，然后停止作业；
 
@@ -47,6 +48,48 @@ mvn clean package -Dmaven.test.skip=true
 ```
 
 再次启动时，加上 savepoint 的路径；
+
 ```shell
 ./bin/flink run -d -c archieyao.github.io.RecoverFromSavepoint -s file:///tmp/flink-training/savepoint-876926-f66663a98361 /home/archieao/workspace/flink-training/checkpoint/target/checkpoint-1.0-SNAPSHOT.jar
 ```
+
+## TopologyChange
+
+1. 启动version1，然后停止时触发一次savepoint
+    ```shell
+    ./bin/flink run -c archieyao.github.io.TopologyChange /opt/flink-1.14.6/examples/custom/checkpoint-1.0-SNAPSHOT.jar
+    ./bin/flink cancel -s 33754a3e19c6f654cbf56ad47e22f8f8
+    
+    # 生成的savepoint路径
+    ls /tmp/flink-training/savepoint-33754a-11127cab305c
+    ```
+
+2. 启动version2，从version1生成的savepoint启动
+   ``` shell
+   ./bin/flink run -s /tmp/flink-training/savepoint-33754a-11127cab305c -c archieyao.github.io.TopologyChange /opt/flink-1.14.6/examples/custom/checkpoint-1.0-SNAPSHOT.jar
+   
+   Caused by: java.util.concurrent.CompletionException: java.lang.IllegalStateException: 
+   Failed to rollback to checkpoint/savepoint file:/tmp/flink-training/savepoint-33754a-11127cab305c. 
+   Cannot map checkpoint/savepoint state for operator 20ba6b65f97481d5570070de90e4e791 to the new program, 
+   because the operator is not available in the new program. If you want to allow to skip this, 
+   you can set the --allowNonRestoredState option on the CLI.
+   ```
+   启动会报错，需要加上 ` --allowNonRestoredState ` 参数：
+   ```shell
+   ./bin/flink run -s /tmp/flink-training/savepoint-33754a-11127cab305c --allowNonRestoredState -c archieyao.github.io.TopologyChange /opt/flink-1.14.6/examples/custom/checkpoint-1.0-SNAPSHOT.jar
+   ```
+   作业可以正常启动，但是不能恢复之前的状态。
+
+3. 启动version3，给算子加上 uid
+   ```shell
+   ./bin/flink run -c archieyao.github.io.TopologyChange /opt/flink-1.14.6/examples/custom/checkpoint-1.0-SNAPSHOT.jar
+   ./bin/flink cancel -s 3fb882db1b2842c5073e3c418f4ddfcd
+   ls /tmp/flink-training/savepoint-3fb882-020b9cb0a8f8
+   ```
+   停止时触发savepoint
+
+4. 启动version4，从savepoint恢复
+   ```shell
+   ./bin/flink run -c archieyao.github.io.TopologyChange -s/tmp/flink-training/savepoint-3fb882-020b9cb0a8f8 --allowNonRestoredState /opt/flink-1.14.6/examples/custom/checkpoint-1.0-SNAPSHOT.jar
+   ```
+   从结果中，version4 输出的count 是从之前version3版本中累加的结果，说明sum 算子加上uid之后，依然可以从快照中恢复。
