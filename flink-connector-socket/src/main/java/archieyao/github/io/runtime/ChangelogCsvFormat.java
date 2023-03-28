@@ -13,10 +13,7 @@ import org.apache.flink.types.RowKind;
 
 import java.util.List;
 
-
-/**
- * @author ArchieYao create at 2022/4/10 3:42 PM
- */
+/** @author ArchieYao create at 2022/4/10 3:42 PM */
 public class ChangelogCsvFormat implements DecodingFormat<DeserializationSchema<RowData>> {
 
     private final String columnDelimiter;
@@ -26,11 +23,13 @@ public class ChangelogCsvFormat implements DecodingFormat<DeserializationSchema<
     }
 
     @Override
-    public DeserializationSchema<RowData> createRuntimeDecoder(DynamicTableSource.Context context, DataType dataType) {
+    public DeserializationSchema<RowData> createRuntimeDecoder(
+            DynamicTableSource.Context context, DataType dataType) {
         final TypeInformation<RowData> producedTypeInfo = context.createTypeInformation(dataType);
         final DataStructureConverter converter = context.createDataStructureConverter(dataType);
         final List<LogicalType> parseTypes = dataType.getLogicalType().getChildren();
-        return new ChangelogCsvDeserializer(parseTypes, converter, producedTypeInfo, columnDelimiter);
+        return new ChangelogCsvDeserializer(
+                parseTypes, converter, producedTypeInfo, columnDelimiter);
     }
 
     @Override

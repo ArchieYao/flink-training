@@ -22,9 +22,9 @@ public class SideOutputProcess extends ProcessFunction<String, Tuple2<String, In
     };
 
     @Override
-    public void processElement(String event,
-                               Context context,
-                               Collector<Tuple2<String, Integer>> collector) throws Exception {
+    public void processElement(
+            String event, Context context, Collector<Tuple2<String, Integer>> collector)
+            throws Exception {
 
         String[] tokens = event.split("\\W+");
         for (String token : tokens) {
@@ -35,27 +35,25 @@ public class SideOutputProcess extends ProcessFunction<String, Tuple2<String, In
             }
         }
     }
-}
 
-
-    // main 
+    // main
     // 创建Flink任务运行环境
     public static void main(String[] args) {
         StreamExecutionEnvironment streamEnv = StreamExecutionEnvironment.getExecutionEnvironment();
         streamEnv.setParallelism(1);
-        DataStreamSource<String> streamSource = streamEnv.fromElements(
-                "Licensed to the Apache Software Foundation (ASF) under one",
-                "or more contributor license agreements.  See the NOTICE file",
-                "distributed with this work for additional information",
-                "regarding copyright ownership.  The ASF licenses this file",
-                "to you under the Apache License, Version 2.0 (the");
+        DataStreamSource<String> streamSource =
+                streamEnv.fromElements(
+                        "Licensed to the Apache Software Foundation (ASF) under one",
+                        "or more contributor license agreements.  See the NOTICE file",
+                        "distributed with this work for additional information",
+                        "regarding copyright ownership.  The ASF licenses this file",
+                        "to you under the Apache License, Version 2.0 (the");
         // 调用自定义的process方法
-        SingleOutputStreamOperator<Tuple2<String, Integer>> process = streamSource
-                .process(new SideOutputProcess());
+        SingleOutputStreamOperator<Tuple2<String, Integer>> process =
+                streamSource.process(new SideOutputProcess());
 
-        SingleOutputStreamOperator<Tuple2<String, Integer>> streamOperator = process
-                .keyBy(event -> event.f0)
-                .sum(1);
+        SingleOutputStreamOperator<Tuple2<String, Integer>> streamOperator =
+                process.keyBy(event -> event.f0).sum(1);
         streamOperator.print();
 
         // side output 通过 output tag 获取 side output ，此时的 side output 没有参与 keyBy sum 等算子的计算
@@ -63,4 +61,5 @@ public class SideOutputProcess extends ProcessFunction<String, Tuple2<String, In
         sideOutput.map(value -> "side output: " + value).print();
         streamEnv.execute("version2");
     }
+}
 ```

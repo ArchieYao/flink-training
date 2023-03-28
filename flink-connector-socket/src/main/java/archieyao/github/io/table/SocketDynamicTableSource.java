@@ -9,10 +9,7 @@ import org.apache.flink.table.connector.source.SourceFunctionProvider;
 import org.apache.flink.table.data.RowData;
 import org.apache.flink.table.types.DataType;
 
-
-/**
- * @author ArchieYao create at 2022/4/9 12:46 PM
- */
+/** @author ArchieYao create at 2022/4/9 12:46 PM */
 public class SocketDynamicTableSource implements ScanTableSource {
 
     private final String hostname;
@@ -41,14 +38,17 @@ public class SocketDynamicTableSource implements ScanTableSource {
 
     @Override
     public ScanRuntimeProvider getScanRuntimeProvider(ScanContext scanContext) {
-        final DeserializationSchema<RowData> deserializer = decodingFormat.createRuntimeDecoder(scanContext, dataType);
-        SocketSourceFunction socketSourceFunction = new SocketSourceFunction(hostname, port, byteDelimiter, deserializer);
+        final DeserializationSchema<RowData> deserializer =
+                decodingFormat.createRuntimeDecoder(scanContext, dataType);
+        SocketSourceFunction socketSourceFunction =
+                new SocketSourceFunction(hostname, port, byteDelimiter, deserializer);
         return SourceFunctionProvider.of(socketSourceFunction, false);
     }
 
     @Override
     public DynamicTableSource copy() {
-        return new SocketDynamicTableSource(hostname, port, byteDelimiter, decodingFormat, dataType);
+        return new SocketDynamicTableSource(
+                hostname, port, byteDelimiter, decodingFormat, dataType);
     }
 
     @Override

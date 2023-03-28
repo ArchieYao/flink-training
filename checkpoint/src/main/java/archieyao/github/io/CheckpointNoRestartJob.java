@@ -11,18 +11,14 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-/**
- * @author ArchieYao
- * Created: 2022/3/1 8:44 PM
- * Description:
- */
+/** @author ArchieYao Created: 2022/3/1 8:44 PM Description: */
 public class CheckpointNoRestartJob {
 
     public static void main(String[] args) throws Exception {
         Logger logger = LoggerFactory.getLogger(CheckpointNoRestartJob.class);
 
-        StreamExecutionEnvironment executionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment executionEnvironment =
+                StreamExecutionEnvironment.getExecutionEnvironment();
         executionEnvironment.setParallelism(1);
 
         // 默认重启策略，没有重启策略
@@ -30,9 +26,11 @@ public class CheckpointNoRestartJob {
         executionEnvironment.enableCheckpointing(10);
 
         // source
-        DataStreamSource<Tuple3<String, Integer, Long>> source = executionEnvironment.addSource(SourceFunc.getSourceFunc(logger));
+        DataStreamSource<Tuple3<String, Integer, Long>> source =
+                executionEnvironment.addSource(SourceFunc.getSourceFunc(logger));
         // map operator
-        SingleOutputStreamOperator<Tuple2<String, Integer>> operator = source.map(MapFunc.getMapFuncWithExp(logger));
+        SingleOutputStreamOperator<Tuple2<String, Integer>> operator =
+                source.map(MapFunc.getMapFuncWithExp(logger));
         // sink
         // operator.keyBy(0).sum(1).print();
         operator.keyBy(v -> v.f0).sum(1).print();

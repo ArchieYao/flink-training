@@ -1,5 +1,6 @@
 package archieyao.github.io.source;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.streaming.api.functions.source.SourceFunction;
 import org.slf4j.Logger;
@@ -17,14 +18,23 @@ public class SourceFunc {
                 int index = 1;
                 while (true) {
                     sourceContext.collect(new Tuple3<>("key", index++, System.currentTimeMillis()));
-                    TimeUnit.MILLISECONDS.sleep(100);
+                    TimeUnit.MILLISECONDS.sleep(1000);
                 }
             }
 
             @Override
             public void cancel() {
-                logger.warn("source func cancel.");
+                //                logger.warn("source func cancel.");
             }
         };
+    }
+
+    public static void main(String[] args) {
+        String[] strings =
+                StringUtils.splitByWholeSeparator(
+                        "/webApp/auctionHouse/saleList/P20221223A2N90MWVAC", "/");
+        for (String string : strings) {
+            System.out.println(string);
+        }
     }
 }

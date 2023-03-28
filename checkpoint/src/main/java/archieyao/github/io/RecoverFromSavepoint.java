@@ -16,20 +16,24 @@ public class RecoverFromSavepoint {
     public static void main(String[] args) throws Exception {
         Logger logger = LoggerFactory.getLogger(RecoverFromSavepoint.class);
 
-        StreamExecutionEnvironment executionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment executionEnvironment =
+                StreamExecutionEnvironment.getExecutionEnvironment();
         executionEnvironment.setParallelism(1);
         executionEnvironment.enableCheckpointing(1000);
         // 保留Checkpoint
-        executionEnvironment.getCheckpointConfig().setExternalizedCheckpointCleanup(
-                CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);
+        executionEnvironment
+                .getCheckpointConfig()
+                .setExternalizedCheckpointCleanup(
+                        CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);
         // source
-        DataStreamSource<Tuple3<String, Integer, Long>> source = executionEnvironment.addSource(SourceFunc.getSourceFunc(logger));
+        DataStreamSource<Tuple3<String, Integer, Long>> source =
+                executionEnvironment.addSource(SourceFunc.getSourceFunc(logger));
         // map operator
-        SingleOutputStreamOperator<Tuple2<String, Integer>> operator = source.map(MapFunc.getMapFunc(logger));
+        SingleOutputStreamOperator<Tuple2<String, Integer>> operator =
+                source.map(MapFunc.getMapFunc(logger));
         // sink
         // operator.keyBy(0).sum(1).print();
         operator.keyBy(v -> v.f0).sum(1).print();
         executionEnvironment.execute("RecoverFromSavepoint");
     }
-
 }

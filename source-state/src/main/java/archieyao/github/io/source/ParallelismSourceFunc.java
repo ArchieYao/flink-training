@@ -14,11 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.TimeUnit;
 
-/**
- * @author ArchieYao
- * Created: 2022/3/1 8:59 PM
- * Description:
- */
+/** @author ArchieYao Created: 2022/3/1 8:59 PM Description: */
 public class ParallelismSourceFunc extends RichParallelSourceFunction<Tuple3<String, Long, Long>>
         implements SourceFunction<Tuple3<String, Long, Long>>, CheckpointedFunction {
 
@@ -51,8 +47,9 @@ public class ParallelismSourceFunc extends RichParallelSourceFunction<Tuple3<Str
     @Override
     public void initializeState(FunctionInitializationContext context) throws Exception {
         indexOfTask = getRuntimeContext().getIndexOfThisSubtask();
-        this.offsetState = context.getOperatorStateStore()
-                .getListState(new ListStateDescriptor<Long>(OFFSET_STATE_NAME, Types.LONG));
+        this.offsetState =
+                context.getOperatorStateStore()
+                        .getListState(new ListStateDescriptor<Long>(OFFSET_STATE_NAME, Types.LONG));
         for (Long l : this.offsetState.get()) {
             offset = l;
             if (offset == 9 || offset == 19) {
@@ -71,7 +68,5 @@ public class ParallelismSourceFunc extends RichParallelSourceFunction<Tuple3<Str
     }
 
     @Override
-    public void cancel() {
-
-    }
+    public void cancel() {}
 }

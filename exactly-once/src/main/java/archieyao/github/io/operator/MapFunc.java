@@ -5,6 +5,8 @@ import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.slf4j.Logger;
 
+import java.util.concurrent.TimeUnit;
+
 /** @author ArchieYao Created: 2022/3/1 9:04 PM Description: */
 public class MapFunc {
 
@@ -18,6 +20,22 @@ public class MapFunc {
                     logger.error("event.f1 more than 100. value : " + event.f1);
                     throw new RuntimeException("event.f1 more than 100.");
                 }
+                return new Tuple2<>(event.f0, event.f1);
+            }
+        };
+    }
+
+    public static MapFunction<Tuple3<String, Integer, Long>, Tuple2<String, Integer>>
+            getMapFuncWithExpAndSleepTime(Logger logger, long sleepTime) {
+        return new MapFunction<Tuple3<String, Integer, Long>, Tuple2<String, Integer>>() {
+            @Override
+            public Tuple2<String, Integer> map(Tuple3<String, Integer, Long> event)
+                    throws Exception {
+                if (event.f1 % 10 == 0) {
+                    logger.error("event.f1 more than 100. value : " + event.f1);
+                    throw new RuntimeException("event.f1 more than 100.");
+                }
+                TimeUnit.SECONDS.sleep(sleepTime);
                 return new Tuple2<>(event.f0, event.f1);
             }
         };

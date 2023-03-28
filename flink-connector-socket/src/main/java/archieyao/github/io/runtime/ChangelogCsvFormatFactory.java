@@ -14,12 +14,11 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * @author ArchieYao create at 2022/4/10 4:06 PM
- */
+/** @author ArchieYao create at 2022/4/10 4:06 PM */
 public class ChangelogCsvFormatFactory implements DeserializationFormatFactory {
 
-    public static final ConfigOption<String> COLUMN_DELIMITER = ConfigOptions.key("column-delimiter").stringType().defaultValue("|");
+    public static final ConfigOption<String> COLUMN_DELIMITER =
+            ConfigOptions.key("column-delimiter").stringType().defaultValue("|");
 
     @Override
     public String factoryIdentifier() {
@@ -27,12 +26,12 @@ public class ChangelogCsvFormatFactory implements DeserializationFormatFactory {
     }
 
     @Override
-    public DecodingFormat<DeserializationSchema<RowData>> createDecodingFormat(DynamicTableFactory.Context context, ReadableConfig readableConfig) {
+    public DecodingFormat<DeserializationSchema<RowData>> createDecodingFormat(
+            DynamicTableFactory.Context context, ReadableConfig readableConfig) {
         FactoryUtil.validateFactoryOptions(this, readableConfig);
         final String columnDelimiter = readableConfig.get(COLUMN_DELIMITER);
         return new ChangelogCsvFormat(columnDelimiter);
     }
-
 
     @Override
     public Set<ConfigOption<?>> requiredOptions() {

@@ -15,6 +15,7 @@
         <module>flink-connector-socket</module>
         <module>side-output</module>
         <module>source-state</module>
+        <module>exactly-once</module>
     </modules>
 
     <properties>

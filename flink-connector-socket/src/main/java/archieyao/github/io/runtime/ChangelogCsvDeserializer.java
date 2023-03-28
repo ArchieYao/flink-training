@@ -14,9 +14,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.regex.Pattern;
 
-/**
- * @author ArchieYao create at 2022/4/10 3:54 PM
- */
+/** @author ArchieYao create at 2022/4/10 3:54 PM */
 public class ChangelogCsvDeserializer implements DeserializationSchema<RowData> {
 
     private final List<LogicalType> parseTypes;
@@ -24,7 +22,11 @@ public class ChangelogCsvDeserializer implements DeserializationSchema<RowData> 
     private final TypeInformation<RowData> dataTypeInformation;
     private final String columnDelimiter;
 
-    public ChangelogCsvDeserializer(List<LogicalType> parseTypes, DynamicTableSource.DataStructureConverter converter, TypeInformation<RowData> dataTypeInformation, String columnDelimiter) {
+    public ChangelogCsvDeserializer(
+            List<LogicalType> parseTypes,
+            DynamicTableSource.DataStructureConverter converter,
+            TypeInformation<RowData> dataTypeInformation,
+            String columnDelimiter) {
         this.parseTypes = parseTypes;
         this.converter = converter;
         this.dataTypeInformation = dataTypeInformation;
@@ -33,7 +35,8 @@ public class ChangelogCsvDeserializer implements DeserializationSchema<RowData> 
 
     @Override
     public void open(InitializationContext context) {
-        converter.open(RuntimeConverter.Context.create(ChangelogCsvDeserializer.class.getClassLoader()));
+        converter.open(
+                RuntimeConverter.Context.create(ChangelogCsvDeserializer.class.getClassLoader()));
     }
 
     @Override

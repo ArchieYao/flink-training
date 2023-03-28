@@ -17,15 +17,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-/**
- * @author ArchieYao
- * Created: 2022/3/1 8:59 PM
- * Description:
- */
-public class ParallelismRestoreFromTaskIndexSourceFunc extends RichParallelSourceFunction<Tuple3<String, Long, Long>>
+/** @author ArchieYao Created: 2022/3/1 8:59 PM Description: */
+public class ParallelismRestoreFromTaskIndexSourceFunc
+        extends RichParallelSourceFunction<Tuple3<String, Long, Long>>
         implements SourceFunction<Tuple3<String, Long, Long>>, CheckpointedFunction {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ParallelismRestoreFromTaskIndexSourceFunc.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(ParallelismRestoreFromTaskIndexSourceFunc.class);
 
     // 表示source一直在取数据
     protected volatile boolean running = true;
@@ -33,7 +31,7 @@ public class ParallelismRestoreFromTaskIndexSourceFunc extends RichParallelSourc
     // 表示源offset
     private transient long offset;
 
-//    private transient ListState<Long> offsetState;
+    //    private transient ListState<Long> offsetState;
 
     private transient ListState<Map<Integer, Long>> offsetState;
     private static final String OFFSET_STATE_NAME = "offset-state";
@@ -57,8 +55,12 @@ public class ParallelismRestoreFromTaskIndexSourceFunc extends RichParallelSourc
     @Override
     public void initializeState(FunctionInitializationContext context) throws Exception {
         indexOfTask = getRuntimeContext().getIndexOfThisSubtask();
-        this.offsetState = context.getOperatorStateStore()
-                .getListState(new ListStateDescriptor<>(OFFSET_STATE_NAME, new MapTypeInfo<Integer, Long>(Types.INT, Types.LONG)));
+        this.offsetState =
+                context.getOperatorStateStore()
+                        .getListState(
+                                new ListStateDescriptor<>(
+                                        OFFSET_STATE_NAME,
+                                        new MapTypeInfo<Integer, Long>(Types.INT, Types.LONG)));
 
         int size = 0;
         for (Map<Integer, Long> map : offsetState.get()) {
@@ -83,7 +85,5 @@ public class ParallelismRestoreFromTaskIndexSourceFunc extends RichParallelSourc
     }
 
     @Override
-    public void cancel() {
-
-    }
+    public void cancel() {}
 }

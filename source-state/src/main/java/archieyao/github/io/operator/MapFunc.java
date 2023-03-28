@@ -6,12 +6,9 @@ import org.apache.flink.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * @author ArchieYao
- * Created: 2022/3/1 9:04 PM
- * Description:
- */
-public class MapFunc extends RichMapFunction<Tuple3<String, Long, Long>, Tuple3<String, Long, Long>> {
+/** @author ArchieYao Created: 2022/3/1 9:04 PM Description: */
+public class MapFunc
+        extends RichMapFunction<Tuple3<String, Long, Long>, Tuple3<String, Long, Long>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MapFunc.class);
     private transient int indexOfSubTask;

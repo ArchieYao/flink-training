@@ -16,10 +16,9 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.concurrent.TimeUnit;
 
-/**
- * @author ArchieYao create at 2022/4/10 3:15 PM
- */
-public class SocketSourceFunction extends RichSourceFunction<RowData> implements ResultTypeQueryable<RowData> {
+/** @author ArchieYao create at 2022/4/10 3:15 PM */
+public class SocketSourceFunction extends RichSourceFunction<RowData>
+        implements ResultTypeQueryable<RowData> {
 
     private final String hostname;
     private final int port;
@@ -29,7 +28,11 @@ public class SocketSourceFunction extends RichSourceFunction<RowData> implements
     private volatile boolean isRunning = true;
     private Socket currentSocket;
 
-    public SocketSourceFunction(String hostname, int port, byte byteDelimiter, DeserializationSchema<RowData> deserializer) {
+    public SocketSourceFunction(
+            String hostname,
+            int port,
+            byte byteDelimiter,
+            DeserializationSchema<RowData> deserializer) {
         this.hostname = hostname;
         this.port = port;
         this.byteDelimiter = byteDelimiter;
@@ -78,16 +81,17 @@ public class SocketSourceFunction extends RichSourceFunction<RowData> implements
 
     @Override
     public void open(Configuration parameters) throws Exception {
-        deserializer.open(new DeserializationSchema.InitializationContext() {
-            @Override
-            public MetricGroup getMetricGroup() {
-                return getRuntimeContext().getMetricGroup();
-            }
+        deserializer.open(
+                new DeserializationSchema.InitializationContext() {
+                    @Override
+                    public MetricGroup getMetricGroup() {
+                        return getRuntimeContext().getMetricGroup();
+                    }
 
-            @Override
-            public UserCodeClassLoader getUserCodeClassLoader() {
-                return (UserCodeClassLoader) getRuntimeContext().getUserCodeClassLoader();
-            }
-        });
+                    @Override
+                    public UserCodeClassLoader getUserCodeClassLoader() {
+                        return (UserCodeClassLoader) getRuntimeContext().getUserCodeClassLoader();
+                    }
+                });
     }
 }

@@ -13,12 +13,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.TimeUnit;
 
-/**
- * @author ArchieYao
- * Created: 2022/3/1 8:59 PM
- * Description:
- */
-public class NoParallelismSourceFunc implements  SourceFunction<Tuple3<String, Long, Long>>,CheckpointedFunction {
+/** @author ArchieYao Created: 2022/3/1 8:59 PM Description: */
+public class NoParallelismSourceFunc
+        implements SourceFunction<Tuple3<String, Long, Long>>, CheckpointedFunction {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NoParallelismSourceFunc.class);
 
@@ -46,13 +43,14 @@ public class NoParallelismSourceFunc implements  SourceFunction<Tuple3<String, L
     // 从快照中恢复offset
     @Override
     public void initializeState(FunctionInitializationContext context) throws Exception {
-        this.offsetState = context.getOperatorStateStore()
-                .getListState(new ListStateDescriptor<Long>(OFFSET_STATE_NAME, Types.LONG));
+        this.offsetState =
+                context.getOperatorStateStore()
+                        .getListState(new ListStateDescriptor<Long>(OFFSET_STATE_NAME, Types.LONG));
         for (Long l : this.offsetState.get()) {
             offset = l;
-            if (offset==9 || offset ==19){
-                offset+=1;
-                LOGGER.error("restore from offset {}",offset);
+            if (offset == 9 || offset == 19) {
+                offset += 1;
+                LOGGER.error("restore from offset {}", offset);
             }
         }
     }
@@ -66,7 +64,5 @@ public class NoParallelismSourceFunc implements  SourceFunction<Tuple3<String, L
     }
 
     @Override
-    public void cancel() {
-
-    }
+    public void cancel() {}
 }

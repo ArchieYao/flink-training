@@ -19,8 +19,8 @@
         <scala.version>2.11.12</scala.version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-<!--        <dependency-scope>provided</dependency-scope>-->
-         <dependency-scope>compile</dependency-scope>
+        <!--        <dependency-scope>provided</dependency-scope>-->
+        <dependency-scope>compile</dependency-scope>
     </properties>
 
     <dependencies>

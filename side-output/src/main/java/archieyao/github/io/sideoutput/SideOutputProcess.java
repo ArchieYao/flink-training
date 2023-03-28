@@ -7,13 +7,12 @@ import org.apache.flink.util.OutputTag;
 
 public class SideOutputProcess extends ProcessFunction<String, Tuple2<String, Integer>> {
 
-    public static final OutputTag<String> largeLenWordsTag = new OutputTag<String>("lager-len") {
-    };
+    public static final OutputTag<String> largeLenWordsTag = new OutputTag<String>("lager-len") {};
 
     @Override
-    public void processElement(String event,
-                               Context context,
-                               Collector<Tuple2<String, Integer>> collector) throws Exception {
+    public void processElement(
+            String event, Context context, Collector<Tuple2<String, Integer>> collector)
+            throws Exception {
 
         String[] tokens = event.split("\\W+");
         for (String token : tokens) {

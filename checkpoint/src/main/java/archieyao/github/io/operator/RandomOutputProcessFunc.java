@@ -17,9 +17,10 @@ public class RandomOutputProcessFunc<T> extends ProcessFunction<T, T> {
         this.outputTag = outputTag;
     }
 
-
     @Override
-    public void processElement(T event, ProcessFunction<T, T>.Context context, Collector<T> collector) throws Exception {
+    public void processElement(
+            T event, ProcessFunction<T, T>.Context context, Collector<T> collector)
+            throws Exception {
         collector.collect(event);
         if (new Random().nextInt() % 5 == 0) {
             logger.warn("RandomOutputProcessFunc output {}", event);
